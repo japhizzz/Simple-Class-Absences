@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Sistem Absensi SMKS Harapan Utama</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-card: #1e293b;
+    --bg-input: #0f172a;
+    --bg-hover: #334155;
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #2dd4bf;
+    --accent-hover: #14b8a6;
+    --accent-glow: rgba(45,212,191,0.3);
+    --accent2: #38bdf8;
+    --accent3: #fb923c;
+    --accent4: #a78bfa;
+    --danger: #f43f5e;
+    --danger-hover: #e11d48;
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --info: #38bdf8;
+    --border: #334155;
+    --shadow: 0 4px 24px rgba(0,0,0,0.3);
+    --shadow-lg: 0 12px 48px rgba(0,0,0,0.4);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --sidebar-width: 260px;
+    --header-height: 60px;
+    --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+[data-theme="light"] {
+    --bg-primary: #f1f5f9;
+    --bg-secondary: #ffffff;
+    --bg-card: #ffffff;
+    --bg-input: #f1f5f9;
+    --bg-hover: #e2e8f0;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --accent: #0d9488;
+    --accent-hover: #0f766e;
+    --accent-glow: rgba(13,148,136,0.2);
+    --accent2: #0284c7;
+    --accent3: #ea580c;
+    --accent4: #7c3aed;
+    --danger: #e11d48;
+    --danger-hover: #be123c;
+    --success: #16a34a;
+    --warning: #d97706;
+    --info: #0284c7;
+    --border: #cbd5e1;
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    --shadow-lg: 0 12px 48px rgba(0,0,0,0.12);
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.6;min-height:100vh;transition:background var(--transition),color var(--transition);-webkit-tap-highlight-color:transparent;}
+a{text-decoration:none;color:inherit;}
+img{max-width:100%;height:auto;}
+
+/* LOGIN */
+.login-wrapper{display:flex;justify-content:center;align-items:center;min-height:100vh;background:var(--bg-primary);padding:16px;position:relative;overflow:hidden;}
+.login-wrapper::before{content:'';position:absolute;width:500px;height:500px;background:radial-gradient(circle,var(--accent-glow),transparent 70%);top:-200px;right:-150px;pointer-events:none;}
+.login-box{background:var(--bg-card);border:1px solid var(--border);border-radius:20px;padding:36px 28px;width:100%;max-width:420px;box-shadow:var(--shadow-lg);position:relative;z-index:1;}
+.login-box .logo{text-align:center;margin-bottom:28px;}
+.login-box .logo .logo-icon{width:72px;height:72px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 14px;box-shadow:0 8px 32px var(--accent-glow);}
+.login-box .logo h1{font-size:20px;font-weight:700;}
+.login-box .logo p{color:var(--text-secondary);font-size:13px;margin-top:4px;}
+
+/* FORM */
+.form-group{margin-bottom:18px;}
+.form-group label{display:block;margin-bottom:6px;font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;}
+.form-control{width:100%;padding:11px 14px;background:var(--bg-input);border:2px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:15px;outline:none;font-family:inherit;transition:border-color var(--transition),box-shadow var(--transition),background var(--transition);-webkit-appearance:none;}
+.form-control:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);}
+.form-control::placeholder{color:var(--text-muted);}
+select.form-control{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px;}
+select.form-control option{background:var(--bg-secondary);color:var(--text-primary);}
+textarea.form-control{resize:vertical;min-height:80px;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 20px;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:600;cursor:pointer;transition:all var(--transition);font-family:inherit;white-space:nowrap;text-decoration:none;touch-action:manipulation;}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-hover));color:#0f172a;box-shadow:0 4px 16px var(--accent-glow);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 24px var(--accent-glow);}
+.btn-block{width:100%;}
+.btn-sm{padding:7px 14px;font-size:12px;}
+.btn-danger{background:var(--danger);color:white;}
+.btn-danger:hover{background:var(--danger-hover);}
+.btn-warning{background:var(--warning);color:#0f172a;}
+.btn-info{background:var(--info);color:#0f172a;}
+.btn-secondary{background:var(--bg-hover);color:var(--text-primary);border:1px solid var(--border);}
+.btn-success{background:var(--success);color:white;}
+
+/* LAYOUT */
+.app-layout{display:flex;min-height:100vh;}
+.sidebar{width:var(--sidebar-width);background:var(--bg-secondary);border-right:1px solid var(--border);position:fixed;top:0;left:0;bottom:0;z-index:100;display:flex;flex-direction:column;transition:transform var(--transition),background var(--transition);overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.sidebar-header{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.sidebar-header .s-info h2{font-size:13px;font-weight:700;line-height:1.3;}
+.sidebar-header .s-info p{font-size:10px;color:var(--text-muted);}
+.sidebar-nav{padding:10px;flex:1;}
+.sidebar-nav .nav-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);padding:14px 10px 6px;}
+.sidebar-nav .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);color:var(--text-secondary);font-size:13px;font-weight:500;transition:all var(--transition);margin-bottom:2px;cursor:pointer;background:none;border:none;width:100%;text-align:left;font-family:inherit;}
+.sidebar-nav .nav-item:hover{background:var(--bg-hover);color:var(--text-primary);}
+.sidebar-nav .nav-item.active{background:linear-gradient(135deg,var(--accent),var(--accent-hover));color:#0f172a;font-weight:600;box-shadow:0 4px 16px var(--accent-glow);}
+.sidebar-nav .nav-item .nav-icon{width:20px;text-align:center;flex-shrink:0;font-size:15px;}
+.nav-badge{background:var(--danger);color:white;font-size:10px;font-weight:800;padding:2px 7px;border-radius:10px;margin-left:4px;line-height:1.4;}
+.sidebar-user{padding:14px 16px;border-top:1px solid var(--border);flex-shrink:0;}
+.sidebar-user .user-info{display:flex;align-items:center;gap:10px;}
+.user-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px;display:block;}
+.user-role{font-size:10px;color:var(--text-muted);}
+
+.main-content{flex:1;margin-left:var(--sidebar-width);min-height:100vh;}
+.top-bar{height:var(--header-height);background:var(--bg-secondary);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:50;transition:background var(--transition),border-color var(--transition);}
+.top-bar .page-title{font-size:16px;font-weight:700;}
+.top-bar .top-actions{display:flex;align-items:center;gap:8px;}
+.theme-toggle{width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--bg-input);color:var(--text-secondary);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:all var(--transition);}
+.theme-toggle:hover{background:var(--bg-hover);color:var(--accent);}
+.content-area{padding:20px;}
+
+/* CARDS */
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;transition:background var(--transition),border-color var(--transition);}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.card-header h3{font-size:15px;font-weight:700;}
+.card-body{padding:20px;}
+.mb-3{margin-bottom:24px;}
+.mt-2{margin-top:16px;}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:20px;}
+.stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;display:flex;align-items:center;gap:14px;transition:all var(--transition);box-shadow:var(--shadow);}
+.stat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.stat-card .stat-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.stat-icon.teal{background:rgba(45,212,191,0.15);color:var(--accent);}
+.stat-icon.blue{background:rgba(56,189,248,0.15);color:var(--accent2);}
+.stat-icon.orange{background:rgba(251,146,60,0.15);color:var(--accent3);}
+.stat-icon.purple{background:rgba(167,139,250,0.15);color:var(--accent4);}
+.stat-icon.red{background:rgba(244,63,94,0.15);color:var(--danger);}
+.stat-icon.green{background:rgba(34,197,94,0.15);color:var(--success);}
+.stat-card .stat-data h4{font-size:22px;font-weight:800;line-height:1;}
+.stat-card .stat-data p{font-size:12px;color:var(--text-secondary);margin-top:3px;}
+
+/* TABLE */
+.table-wrapper{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+table{width:100%;border-collapse:collapse;}
+table thead th{padding:12px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);border-bottom:2px solid var(--border);white-space:nowrap;background:var(--bg-card);}
+table tbody td{padding:12px 14px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle;background:var(--bg-card);transition:background var(--transition);}
+table tbody tr:hover td{background:var(--bg-hover);}
+table tbody tr:last-child td{border-bottom:none;}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;white-space:nowrap;}
+.badge-kepsek{background:rgba(251,146,60,0.15);color:var(--accent3);}
+.badge-admin{background:rgba(56,189,248,0.15);color:var(--accent2);}
+.badge-siswa{background:rgba(45,212,191,0.15);color:var(--accent);}
+.badge-hadir{background:rgba(34,197,94,0.15);color:var(--success);}
+.badge-izin{background:rgba(56,189,248,0.15);color:var(--info);}
+.badge-sakit{background:rgba(245,158,11,0.15);color:var(--warning);}
+.badge-alpha{background:rgba(244,63,94,0.15);color:var(--danger);}
+.badge-pending{background:rgba(245,158,11,0.15);color:var(--warning);}
+.badge-approved{background:rgba(34,197,94,0.15);color:var(--success);}
+.badge-rejected{background:rgba(244,63,94,0.15);color:var(--danger);}
+.badge-aktif{background:rgba(34,197,94,0.15);color:var(--success);}
+.badge-nonaktif{background:rgba(244,63,94,0.15);color:var(--danger);}
+
+/* ALERTS */
+.alert{padding:12px 16px;border-radius:var(--radius-sm);margin-bottom:16px;font-size:13px;font-weight:500;border-left:4px solid;}
+.alert-success{background:rgba(34,197,94,0.1);border-color:var(--success);color:var(--success);}
+.alert-error{background:rgba(244,63,94,0.1);border-color:var(--danger);color:var(--danger);}
+.alert-warning{background:rgba(245,158,11,0.1);border-color:var(--warning);color:var(--warning);}
+.alert-info{background:rgba(56,189,248,0.1);border-color:var(--info);color:var(--info);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:1000;padding:16px;}
+.modal-overlay.show{display:flex;}
+.modal{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);width:100%;max-width:480px;box-shadow:var(--shadow-lg);max-height:90vh;overflow-y:auto;}
+.modal-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-header h3{font-size:15px;font-weight:700;}
+.modal-close{width:30px;height:30px;border:none;background:var(--bg-hover);border-radius:8px;color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.modal-close:hover{background:var(--danger);color:white;}
+.modal-body{padding:20px;}
+.modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;}
+
+/* FILTER */
+.filter-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+.filter-bar .form-control{width:auto;min-width:140px;flex:1;}
+
+/* ABSEN OPTIONS */
+.absen-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.absen-option{border:2px solid var(--border);border-radius:var(--radius);padding:20px 12px;text-align:center;cursor:pointer;transition:all var(--transition);background:var(--bg-card);}
+.absen-option:hover{border-color:var(--accent);transform:translateY(-2px);}
+.absen-option.selected{border-color:var(--accent);background:rgba(45,212,191,0.08);}
+.absen-option .absen-icon{font-size:32px;margin-bottom:8px;}
+.absen-option .absen-label{font-size:14px;font-weight:700;}
+.absen-option .absen-desc{font-size:11px;color:var(--text-secondary);margin-top:3px;}
+
+/* UPLOAD */
+.upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:24px;text-align:center;cursor:pointer;transition:all var(--transition);background:var(--bg-input);position:relative;overflow:hidden;}
+.upload-zone:hover{border-color:var(--accent);}
+.upload-zone input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.upload-zone .upload-icon{font-size:32px;margin-bottom:6px;}
+.upload-zone .upload-text{font-size:13px;color:var(--text-secondary);}
+.upload-zone .upload-hint{font-size:11px;color:var(--text-muted);margin-top:4px;}
+
+/* PROFILE */
+.profile-photo-wrapper{position:relative;width:100px;height:100px;margin:0 auto 20px;}
+.profile-photo-wrapper img,.profile-photo-wrapper .profile-initials{width:100px;height:100px;border-radius:24px;object-fit:cover;}
+.profile-initials{background:linear-gradient(135deg,var(--accent3),var(--accent4));display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:800;color:white;}
+.profile-photo-edit{position:absolute;bottom:-4px;right:-4px;width:30px;height:30px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;border:3px solid var(--bg-card);}
+
+/* UTILITY */
+.text-center{text-align:center;}
+.text-muted{color:var(--text-muted);}
+.action-btns{display:flex;gap:4px;flex-wrap:wrap;}
+.action-btns .btn{padding:5px 10px;font-size:11px;}
+.empty-state{text-align:center;padding:36px 16px;color:var(--text-muted);}
+.empty-state .empty-icon{font-size:40px;margin-bottom:10px;}
+.empty-state p{font-size:14px;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--bg-primary);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+/* MOBILE */
+.mobile-toggle{width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--bg-input);color:var(--text-secondary);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;}
+.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99;display:none;}
+.sidebar-overlay.show{display:block;}
+
+/* PAGE SECTIONS */
+.page-section{display:none;}
+.page-section.active{display:block;}
+
+/* Forgot link */
+.forgot-link{display:block;text-align:center;margin-top:14px;color:var(--accent);font-size:13px;font-weight:500;cursor:pointer;transition:color 0.2s;background:none;border:none;font-family:inherit;width:100%;}
+.forgot-link:hover{color:var(--accent-hover);text-decoration:underline;}
+.ext-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:1000;padding:16px;}
+.ext-modal-overlay.show{display:flex;}
+.ext-modal{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;width:100%;max-width:400px;box-shadow:0 12px 48px rgba(0,0,0,0.4);overflow:hidden;}
+.ext-modal-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.ext-modal-header h3{font-size:15px;font-weight:700;color:var(--text-primary);}
+.ext-modal-close{width:30px;height:30px;border:none;background:var(--bg-hover);border-radius:8px;color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.ext-modal-close:hover{background:var(--danger);color:white;}
+.ext-modal-body{padding:24px 20px;text-align:center;}
+.ext-modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:center;gap:10px;}
+.ext-link-url{display:inline-block;background:var(--bg-input);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:12px;color:var(--text-muted);word-break:break-all;margin-top:12px;max-width:100%;}
+
+/* TAB BUTTONS */
+.tab-btns{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+
+@media(max-width:768px){
+    :root{--sidebar-width:260px;--header-height:54px;}
+    .sidebar{transform:translateX(-100%);}
+    .sidebar.open{transform:translateX(0);}
+    .main-content{margin-left:0!important;}
+    .content-area{padding:14px;}
+    .top-bar{padding:0 14px;}
+    .top-bar .page-title{font-size:14px;}
+    .mobile-toggle{display:flex!important;}
+    .stats-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+    .stat-card{padding:14px;gap:10px;}
+    .stat-card .stat-icon{width:40px;height:40px;font-size:18px;border-radius:10px;}
+    .stat-card .stat-data h4{font-size:18px;}
+    .absen-grid{grid-template-columns:repeat(3,1fr);gap:8px;}
+    .absen-option{padding:14px 8px;}
+    .absen-option .absen-icon{font-size:26px;}
+    .absen-option .absen-label{font-size:12px;}
+    .card-header{padding:14px 16px;}
+    .card-body{padding:14px;}
+    .filter-bar{flex-direction:column;}
+    .filter-bar .form-control{width:100%;min-width:unset;}
+    .login-box{padding:28px 20px;}
+    .action-btns{flex-direction:column;}
+    .action-btns .btn{width:100%;justify-content:center;}
+}
+@media(min-width:769px){
+    .mobile-toggle{display:none!important;}
+    .sidebar-overlay{display:none!important;}
+}
+</style>
+</head>
+<body>
+<script>
+(function(){
+    var s=localStorage.getItem('theme')||'system';
+    if(s==='system'){var d=window.matchMedia('(prefers-color-scheme:dark)').matches;document.documentElement.setAttribute('data-theme',d?'dark':'light');}
+    else document.documentElement.setAttribute('data-theme',s);
+})();
+</script>
+
+<!-- ===== LOGIN PAGE ===== -->
+<div id="loginPage">
+<div class="login-wrapper">
+    <div class="login-box">
+        <div class="logo">
+            <div class="logo-icon">📚</div>
+            <h1>SMKS Harapan Utama</h1>
+            <p>Sistem Absensi Siswa</p>
+        </div>
+        <div id="loginAlert" style="display:none;"></div>
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="loginUser" class="form-control" placeholder="Masukkan username" autocomplete="username">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="loginPass" class="form-control" placeholder="Masukkan password" autocomplete="current-password">
+        </div>
+        <button class="btn btn-primary btn-block" style="margin-top:8px;" onclick="doLogin()">Masuk</button>
+        <button type="button" class="forgot-link" onclick="document.getElementById('extLinkModal').classList.add('show')">Lupa Password?</button>
+        <div style="text-align:center;margin-top:16px;">
+            <button class="theme-toggle" onclick="cycleThemeLogin()" id="loginThemeBtn" style="margin:0 auto;">💻</button>
+            <p style="font-size:10px;color:var(--text-muted);margin-top:6px;" id="themeLabel">Tema: Ikuti Sistem</p>
+        </div>
+        <p style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:16px;">Demo: kepala_sekolah/kepsek123 | admin/admin123 | siswa_tjkt_01/siswa123</p>
+    </div>
+</div>
+</div>
+
+<!-- External Link Modal -->
+<div class="ext-modal-overlay" id="extLinkModal">
+    <div class="ext-modal">
+        <div class="ext-modal-header">
+            <h3>⚠️ Peringatan</h3>
+            <button class="ext-modal-close" onclick="document.getElementById('extLinkModal').classList.remove('show')">✕</button>
+        </div>
+        <div class="ext-modal-body">
+            <div style="font-size:44px;margin-bottom:12px;">🔗</div>
+            <p style="font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:8px;">Anda akan menuju link external</p>
+            <p style="color:var(--text-secondary);font-size:13px;">Anda akan diarahkan ke WhatsApp untuk menghubungi admin sekolah terkait reset password.</p>
+            <div class="ext-link-url">https://wa.me/+41798931892</div>
+        </div>
+        <div class="ext-modal-footer">
+            <button class="btn btn-secondary" onclick="document.getElementById('extLinkModal').classList.remove('show')">Batal</button>
+            <a href="https://wa.me/+41798931892" target="_blank" rel="noopener noreferrer" class="btn btn-primary" onclick="document.getElementById('extLinkModal').classList.remove('show')">Lanjutkan</a>
+        </div>
+    </div>
+</div>
+
+<!-- ===== APP PAGE ===== -->
+<div id="appPage" style="display:none;">
+<div class="app-layout">
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-icon" style="width:42px;height:42px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">📚</div>
+            <div class="s-info">
+                <h2>SMKS Harapan Utama</h2>
+                <p>Sistem Absensi</p>
+            </div>
+        </div>
+        <nav class="sidebar-nav" id="sidebarNav"></nav>
+        <div class="sidebar-user">
+            <div class="user-info">
+                <div id="sidebarAvatar"></div>
+                <div class="user-detail">
+                    <span class="user-name" id="sidebarName"></span>
+                    <span class="user-role" id="sidebarRole"></span>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <main class="main-content">
+        <header class="top-bar">
+            <div style="display:flex;align-items:center;gap:10px;">
+                <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
+                <span class="page-title" id="pageTitle">Dashboard</span>
+            </div>
+            <div class="top-actions">
+                <button id="pendingBtn" class="btn btn-sm btn-warning" style="font-size:11px;display:none;" onclick="goPage('kelola_izin')">📨 <span id="pendingTopCount">0</span></button>
+                <button class="theme-toggle" id="themeToggle" onclick="cycleTheme()" title="Ganti Tema">💻</button>
+            </div>
+        </header>
+        <div class="content-area">
+            <!-- PAGES -->
+            <div id="page-dashboard" class="page-section"></div>
+            <div id="page-absensi" class="page-section"></div>
+            <div id="page-riwayat" class="page-section"></div>
+            <div id="page-kelola_izin" class="page-section"></div>
+            <div id="page-kelola_kelas" class="page-section"></div>
+            <div id="page-kelola_user" class="page-section"></div>
+            <div id="page-profil" class="page-section"></div>
+            <div id="page-kelola_logo" class="page-section"></div>
+            <div id="page-ekspor" class="page-section"></div>
+        </div>
+    </main>
+</div>
+
+<!-- Logout Modal -->
+<div class="modal-overlay" id="logoutModal">
+    <div class="modal" style="max-width:380px;">
+        <div class="modal-header">
+            <h3>Konfirmasi Logout</h3>
+            <button class="modal-close" onclick="closeModal('logoutModal')">✕</button>
+        </div>
+        <div class="modal-body" style="text-align:center;padding:28px 20px;">
+            <div style="font-size:44px;margin-bottom:12px;">🤔</div>
+            <p style="font-size:15px;font-weight:600;margin-bottom:6px;">Yakin mau logout?</p>
+            <p style="color:var(--text-secondary);font-size:13px;">Anda harus login kembali untuk mengakses sistem.</p>
+        </div>
+        <div class="modal-footer" style="justify-content:center;gap:12px;">
+            <button class="btn btn-secondary" onclick="closeModal('logoutModal')">Batal</button>
+            <button class="btn btn-danger" onclick="doLogout()">Ya, Logout</button>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+// ============ DATA STORE ============
+var DB = {
+    users: [
+        {id:1,username:'kepala_sekolah',password:'kepsek123',nama_lengkap:'Drs. Supriyadi, M.Pd',role:'kepala_sekolah',kelas_id:null,is_active:1,foto_profil:'',created_at:'2024-01-01 08:00:00'},
+        {id:2,username:'admin',password:'admin123',nama_lengkap:'Siti Rahayu',role:'admin',kelas_id:null,is_active:1,foto_profil:'',created_at:'2024-01-01 08:00:00'},
+        {id:3,username:'siswa_tjkt_01',password:'siswa123',nama_lengkap:'Ahmad Fauzi',role:'siswa',kelas_id:1,is_active:1,foto_profil:'',created_at:'2024-01-15 10:00:00'},
+        {id:4,username:'siswa_tjkt_02',password:'siswa123',nama_lengkap:'Budi Santoso',role:'siswa',kelas_id:1,is_active:1,foto_profil:'',created_at:'2024-01-15 10:00:00'},
+        {id:5,username:'siswa_tjkt_03',password:'siswa123',nama_lengkap:'Citra Dewi',role:'siswa',kelas_id:1,is_active:1,foto_profil:'',created_at:'2024-01-15 10:00:00'},
+        {id:6,username:'siswa_akl_01',password:'siswa123',nama_lengkap:'Dina Maulida',role:'siswa',kelas_id:2,is_active:1,foto_profil:'',created_at:'2024-01-15 10:00:00'},
+        {id:7,username:'siswa_akl_02',password:'siswa123',nama_lengkap:'Eko Prasetyo',role:'siswa',kelas_id:2,is_active:1,foto_profil:'',created_at:'2024-01-15 10:00:00'},
+        {id:8,username:'siswa_akl_03',password:'siswa123',nama_lengkap:'Fitri Handayani',role:'siswa',kelas_id:2,is_active:1,foto_profil:'',created_at:'2024-01-15 10:00:00'},
+    ],
+    kelas: [
+        {id:1,nama_kelas:'XI-TJKT',created_at:'2024-01-01'},
+        {id:2,nama_kelas:'XI-AKL',created_at:'2024-01-01'},
+    ],
+    absensi: [],
+    settings: {logo_sekolah: '', nama_sekolah: 'SMKS Harapan Utama'},
+    nextUserId: 9,
+    nextKelasId: 3,
+    nextAbsenId: 1,
+};
+
+// Generate some dummy absensi history
+(function(){
+    var today = new Date();
+    var statuses = ['hadir','hadir','hadir','hadir','izin','sakit','alpha','hadir'];
+    for(var d=6;d>=0;d--){
+        var date = new Date(today);
+        date.setDate(date.getDate()-d);
+        var dateStr = date.toISOString().split('T')[0];
+        DB.users.filter(function(u){return u.role==='siswa';}).forEach(function(u,idx){
+            var st = statuses[(idx+d)%statuses.length];
+            var app = st==='hadir'?'approved':st==='alpha'?'approved':(d>3?'pending':'approved');
+            DB.absensi.push({
+                id: DB.nextAbsenId++,
+                user_id: u.id,
+                kelas_id: u.kelas_id,
+                tanggal: dateStr,
+                status: st,
+                keterangan: (st==='izin'||st==='sakit')?'Sakit demam':'',
+                bukti_file: '',
+                approval: app,
+                approved_by: app==='approved'?1:null,
+                approved_at: app==='approved'?dateStr+' 10:00:00':null,
+                recorded_by: 2,
+                is_self_report: 0,
+                created_at: dateStr+' 07:30:00'
+            });
+        });
+    }
+})();
+
+var currentUser = null;
+var currentPage = 'dashboard';
+
+// ============ AUTH ============
+function doLogin(){
+    var un = document.getElementById('loginUser').value.trim();
+    var pw = document.getElementById('loginPass').value;
+    var user = DB.users.find(function(u){return u.username===un && u.password===pw;});
+    if(!user){showLoginError('Username atau password salah.');return;}
+    if(!user.is_active){showLoginError('Akun dinonaktifkan.');return;}
+    currentUser = user;
+    document.getElementById('loginPage').style.display='none';
+    document.getElementById('appPage').style.display='block';
+    buildSidebar();
+    goPage('dashboard');
+}
+function showLoginError(msg){
+    var el=document.getElementById('loginAlert');
+    el.className='alert alert-error';
+    el.textContent=msg;
+    el.style.display='block';
+}
+function doLogout(){
+    currentUser=null;
+    closeModal('logoutModal');
+    document.getElementById('appPage').style.display='none';
+    document.getElementById('loginPage').style.display='block';
+    document.getElementById('loginUser').value='';
+    document.getElementById('loginPass').value='';
+    document.getElementById('loginAlert').style.display='none';
+}
+
+// ============ HELPERS ============
+function getNamaKelas(kelas_id){
+    var k=DB.kelas.find(function(k){return k.id===kelas_id;});
+    return k?k.nama_kelas:'-';
+}
+function getUser(id){return DB.users.find(function(u){return u.id===id;});}
+function today(){return new Date().toISOString().split('T')[0];}
+function fmtDate(str){
+    if(!str)return'-';
+    var d=new Date(str);
+    return d.getDate().toString().padStart(2,'0')+'/'+(d.getMonth()+1).toString().padStart(2,'0')+'/'+d.getFullYear();
+}
+function roleBadge(role){
+    var map={kepala_sekolah:'badge-kepsek',admin:'badge-admin',siswa:'badge-siswa'};
+    var lbl={kepala_sekolah:'Kepala Sekolah',admin:'Admin',siswa:'Siswa'};
+    return '<span class="badge '+map[role]+'">'+lbl[role]+'</span>';
+}
+function getInitials(name){
+    return (name||'').split(' ').slice(0,2).map(function(w){return w[0]||'';}).join('').toUpperCase();
+}
+function avatar(user,size,fs){
+    size=size||36;fs=fs||14;
+    var ini=getInitials(user.nama_lengkap);
+    var r=Math.round(size*0.28);
+    return '<div style="width:'+size+'px;height:'+size+'px;border-radius:'+r+'px;background:linear-gradient(135deg,var(--accent3),var(--accent4));display:flex;align-items:center;justify-content:center;font-size:'+fs+'px;font-weight:700;color:white;flex-shrink:0;">'+ini+'</div>';
+}
+function getPendingCount(){
+    return DB.absensi.filter(function(a){return a.approval==='pending' && (a.status==='izin'||a.status==='sakit');}).length;
+}
+function showAlert(containerId, type, msg){
+    var el=document.getElementById(containerId);
+    if(!el)return;
+    el.innerHTML='<div class="alert alert-'+type+'">'+msg+'</div>';
+    setTimeout(function(){if(el)el.innerHTML='';},4000);
+}
+
+// ============ SIDEBAR ============
+function buildSidebar(){
+    var u=currentUser;
+    document.getElementById('sidebarAvatar').innerHTML=avatar(u,34,13);
+    document.getElementById('sidebarName').textContent=u.nama_lengkap;
+    var roleLabel={kepala_sekolah:'Kepala Sekolah',admin:'Admin',siswa:'Siswa'};
+    var kn = u.kelas_id ? ' • '+getNamaKelas(u.kelas_id):'';
+    document.getElementById('sidebarRole').textContent=roleLabel[u.role]+kn;
+
+    var nav=document.getElementById('sidebarNav');
+    var items=[{icon:'📊',label:'Dashboard',page:'dashboard'}];
+    if(u.role==='admin'||u.role==='kepala_sekolah'){
+        items.push({icon:'📋',label:'Input Absensi',page:'absensi'});
+        var pc=getPendingCount();
+        items.push({icon:'📨',label:'Persetujuan Izin'+(pc>0?' <span class="nav-badge">'+pc+'</span>':''),page:'kelola_izin'});
+    }
+    items.push({icon:'📜',label:'Riwayat Absensi',page:'riwayat'});
+    if(u.role==='admin'||u.role==='kepala_sekolah'){
+        items.push({icon:'📦',label:'Ekspor Absensi',page:'ekspor'});
+    }
+    if(u.role==='kepala_sekolah'){
+        items.push({icon:'👥',label:'Kelola User',page:'kelola_user'});
+        items.push({icon:'🏫',label:'Kelola Kelas',page:'kelola_kelas'});
+        items.push({icon:'📷',label:'Pengaturan Logo',page:'kelola_logo'});
+    }
+    items.push({icon:'⚙️',label:'Profil Saya',page:'profil'});
+
+    var html='<div class="nav-label">Menu</div>';
+    items.forEach(function(it){
+        html+='<button class="nav-item" data-page="'+it.page+'" onclick="goPage(\''+it.page+'\')"><span class="nav-icon">'+it.icon+'</span><span>'+it.label+'</span></button>';
+    });
+    html+='<div class="nav-label" style="margin-top:10px;">Lainnya</div>';
+    html+='<button class="nav-item" style="color:var(--danger);" onclick="openModal(\'logoutModal\')"><span class="nav-icon">🚪</span><span>Logout</span></button>';
+    nav.innerHTML=html;
+    updatePendingBtn();
+}
+
+function updatePendingBtn(){
+    var pc=getPendingCount();
+    var btn=document.getElementById('pendingBtn');
+    if(pc>0&&(currentUser.role==='admin'||currentUser.role==='kepala_sekolah')){
+        btn.style.display='flex';
+        document.getElementById('pendingTopCount').textContent=pc;
+    } else {
+        btn.style.display='none';
+    }
+}
+
+function goPage(page){
+    currentPage=page;
+    document.querySelectorAll('.page-section').forEach(function(el){el.classList.remove('active');});
+    var el=document.getElementById('page-'+page);
+    if(el)el.classList.add('active');
+    document.querySelectorAll('.nav-item[data-page]').forEach(function(b){
+        b.classList.toggle('active',b.getAttribute('data-page')===page);
+    });
+    var titles={dashboard:'Dashboard',absensi:'Input Absensi',riwayat:'Riwayat Absensi',kelola_izin:'Persetujuan Izin/Sakit',kelola_kelas:'Kelola Kelas',kelola_user:'Kelola User',profil:'Profil Saya',kelola_logo:'Pengaturan Logo',ekspor:'Ekspor Absensi'};
+    document.getElementById('pageTitle').textContent=titles[page]||page;
+    var fn=pageRenderers[page];
+    if(fn)fn();
+    // close sidebar mobile
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('show');
+}
+
+// ============ PAGE RENDERERS ============
+var pageRenderers = {};
+
+// ---- DASHBOARD ----
+pageRenderers.dashboard = function(){
+    var el=document.getElementById('page-dashboard');
+    var u=currentUser;
+    var t=today();
+    var isSiswa=u.role==='siswa';
+
+    var html='';
+    html+='<div style="margin-bottom:24px;"><h2 style="font-size:22px;font-weight:800;">Selamat Datang, '+u.nama_lengkap+'!</h2>';
+    html+='<p style="color:var(--text-secondary);margin-top:4px;font-size:13px;">';
+    var rl={kepala_sekolah:'Kepala Sekolah',admin:'Admin',siswa:'Siswa'};
+    html+=rl[u.role]+(u.kelas_id?' &mdash; '+getNamaKelas(u.kelas_id):'');
+    html+=' | '+new Date().toLocaleDateString('id-ID',{weekday:'long',year:'numeric',month:'long',day:'numeric'})+'</p></div>';
+
+    html+='<div id="dashAlert"></div>';
+
+    if(!isSiswa){
+        var totalSiswa=DB.users.filter(function(u){return u.role==='siswa'&&u.is_active;}).length;
+        var totalKelas=DB.kelas.length;
+        var hadirToday=DB.absensi.filter(function(a){return a.tanggal===t&&a.status==='hadir';}).length;
+        var izinToday=DB.absensi.filter(function(a){return a.tanggal===t&&a.status==='izin'&&a.approval==='approved';}).length;
+        var sakitToday=DB.absensi.filter(function(a){return a.tanggal===t&&a.status==='sakit'&&a.approval==='approved';}).length;
+        var alphaToday=DB.absensi.filter(function(a){return a.tanggal===t&&a.status==='alpha';}).length;
+        var pc=getPendingCount();
+        html+='<div class="stats-grid">';
+        html+='<div class="stat-card"><div class="stat-icon teal">🎓</div><div class="stat-data"><h4>'+totalSiswa+'</h4><p>Total Siswa</p></div></div>';
+        html+='<div class="stat-card"><div class="stat-icon blue">🏫</div><div class="stat-data"><h4>'+totalKelas+'</h4><p>Total Kelas</p></div></div>';
+        html+='<div class="stat-card"><div class="stat-icon green">✅</div><div class="stat-data"><h4>'+hadirToday+'</h4><p>Hadir Hari Ini</p></div></div>';
+        html+='<div class="stat-card"><div class="stat-icon orange">📝</div><div class="stat-data"><h4>'+(izinToday+sakitToday)+'</h4><p>Izin/Sakit Hari Ini</p></div></div>';
+        html+='<div class="stat-card"><div class="stat-icon red">❌</div><div class="stat-data"><h4>'+alphaToday+'</h4><p>Alpha Hari Ini</p></div></div>';
+        if(pc>0) html+='<div class="stat-card"><div class="stat-icon purple">⏳</div><div class="stat-data"><h4>'+pc+'</h4><p>Pending Izin</p></div></div>';
+        html+='</div>';
+    }
+
+    if(isSiswa){
+        var myAbsenToday=DB.absensi.find(function(a){return a.user_id===u.id&&a.tanggal===t;});
+        var dow=new Date().getDay();
+        var weekStart=new Date(); weekStart.setDate(weekStart.getDate()-(dow===0?6:dow-1));
+        var weekEnd=new Date(); weekEnd.setDate(weekEnd.getDate()+(dow===0?0:7-dow));
+        var wsStr=weekStart.toISOString().split('T')[0];
+        var weStr=weekEnd.toISOString().split('T')[0];
+        var myWeek=DB.absensi.filter(function(a){return a.user_id===u.id&&a.tanggal>=wsStr&&a.tanggal<=weStr;});
+        var hadirWk=myWeek.filter(function(a){return a.status==='hadir';}).length;
+        var izinWk=myWeek.filter(function(a){return (a.status==='izin'||a.status==='sakit')&&a.approval==='approved';}).length;
+        var alphaWk=myWeek.filter(function(a){return a.status==='alpha';}).length;
+        var allMine=DB.absensi.filter(function(a){return a.user_id===u.id;});
+        var hadirAll=allMine.filter(function(a){return a.status==='hadir';}).length;
+        var persen=allMine.length>0?Math.round(hadirAll/allMine.length*100):0;
+        html+='<div class="stats-grid">';
+        html+='<div class="stat-card"><div class="stat-icon green">✅</div><div class="stat-data"><h4>'+hadirWk+'</h4><p>Hadir Minggu Ini</p></div></div>';
+        html+='<div class="stat-card"><div class="stat-icon orange">📝</div><div class="stat-data"><h4>'+izinWk+'</h4><p>Izin/Sakit Minggu Ini</p></div></div>';
+        html+='<div class="stat-card"><div class="stat-icon red">❌</div><div class="stat-data"><h4>'+alphaWk+'</h4><p>Alpha Minggu Ini</p></div></div>';
+        html+='<div class="stat-card"><div class="stat-icon purple">📈</div><div class="stat-data"><h4>'+persen+'%</h4><p>Kehadiran Total</p></div></div>';
+        html+='</div>';
+
+        // Self absen card
+        html+='<div class="card" style="margin-bottom:20px;"><div class="card-header"><h3>Absensi Mandiri &mdash; '+fmtDate(t)+'</h3>';
+        if(myAbsenToday){
+            html+='<div style="display:flex;gap:6px;">';
+            html+='<span class="badge badge-'+myAbsenToday.status+'">'+myAbsenToday.status.charAt(0).toUpperCase()+myAbsenToday.status.slice(1)+'</span>';
+            if(myAbsenToday.status==='hadir') html+='<span class="badge badge-approved">Tercatat</span>';
+            else if(myAbsenToday.approval==='pending') html+='<span class="badge badge-pending">Menunggu</span>';
+            else if(myAbsenToday.approval==='rejected') html+='<span class="badge badge-rejected">Ditolak</span>';
+            else html+='<span class="badge badge-approved">Disetujui</span>';
+            html+='</div>';
+        }
+        html+='</div><div class="card-body">';
+        if(myAbsenToday){
+            var ico=myAbsenToday.status==='hadir'?'✅':(myAbsenToday.status==='izin'?'📝':'🤒');
+            html+='<div class="empty-state" style="padding:20px;"><div class="empty-icon">'+ico+'</div>';
+            html+='<p>Sudah absen: <strong>'+myAbsenToday.status.charAt(0).toUpperCase()+myAbsenToday.status.slice(1)+'</strong></p>';
+            if(myAbsenToday.status==='hadir') html+='<p style="margin-top:6px;color:var(--success);font-size:13px;">Kehadiran tercatat.</p>';
+            else if(myAbsenToday.approval==='pending') html+='<p style="margin-top:6px;color:var(--warning);font-size:13px;">Menunggu persetujuan.</p>';
+            else if(myAbsenToday.approval==='rejected') html+='<p style="margin-top:6px;color:var(--danger);font-size:13px;">Ditolak. Hubungi admin.</p>';
+            else html+='<p style="margin-top:6px;color:var(--success);font-size:13px;">Disetujui.</p>';
+            html+='</div>';
+        } else {
+            html+='<p style="color:var(--text-secondary);margin-bottom:14px;font-size:13px;">Pilih status kehadiran:</p>';
+            html+='<div class="absen-grid">';
+            html+='<div class="absen-option" onclick="selectAbsen(\'hadir\')" id="opt-hadir"><div class="absen-icon">✅</div><div class="absen-label">Hadir</div><div class="absen-desc">Langsung tercatat</div></div>';
+            html+='<div class="absen-option" onclick="selectAbsen(\'izin\')" id="opt-izin"><div class="absen-icon">📝</div><div class="absen-label">Izin</div><div class="absen-desc">Perlu persetujuan</div></div>';
+            html+='<div class="absen-option" onclick="selectAbsen(\'sakit\')" id="opt-sakit"><div class="absen-icon">🤒</div><div class="absen-label">Sakit</div><div class="absen-desc">Perlu persetujuan</div></div>';
+            html+='</div>';
+            html+='<div id="detailIzinSakit" style="display:none;margin-top:16px;">';
+            html+='<div class="form-group"><label>Alasan *</label><textarea id="selfKet" class="form-control" placeholder="Jelaskan alasan..." rows="3"></textarea></div>';
+            html+='<div class="form-group"><label>Upload Bukti (Foto/Video) * <span style="font-weight:400;color:var(--text-muted);text-transform:none;">&mdash; Maks 5 file, total 50MB</span></label>';
+            html+='<div class="upload-zone"><input type="file" id="buktiInput" accept="image/*,video/*" multiple><div class="upload-icon">📤</div><div class="upload-text">Klik untuk upload</div><div class="upload-hint">JPG, PNG, GIF, WEBP, MP4, MOV, WEBM</div></div>';
+            html+='<div id="uploadPreviewList" style="margin-top:10px;"></div></div></div>';
+            html+='<button class="btn btn-primary btn-block mt-2" id="submitAbsen" style="display:none;" onclick="submitSelfAbsen()">Kirim Absensi</button>';
+        }
+        html+='</div></div>';
+    }
+
+    // Riwayat table
+    html+='<div class="card"><div class="card-header"><h3>'+(isSiswa?'Riwayat Absensi Saya':'Absensi Hari Ini')+'</h3></div><div class="card-body"><div class="table-wrapper">';
+    var rows;
+    if(isSiswa){
+        rows=DB.absensi.filter(function(a){return a.user_id===u.id;}).sort(function(a,b){return b.tanggal.localeCompare(a.tanggal);}).slice(0,15);
+    } else {
+        rows=DB.absensi.filter(function(a){return a.tanggal===t;}).sort(function(a,b){
+            var ua=getUser(a.user_id),ub=getUser(b.user_id);
+            return (ua?ua.nama_lengkap:'').localeCompare(ub?ub.nama_lengkap:'');
+        }).slice(0,50);
+    }
+    if(rows.length>0){
+        html+='<table><thead><tr><th>No</th>';
+        if(!isSiswa) html+='<th>Nama</th>';
+        html+='<th>Kelas</th><th>Tanggal</th><th>Status</th><th>Info</th><th>Ket</th></tr></thead><tbody>';
+        rows.forEach(function(r,i){
+            var ru=getUser(r.user_id);
+            html+='<tr><td>'+(i+1)+'</td>';
+            if(!isSiswa) html+='<td><strong>'+(ru?ru.nama_lengkap:'-')+'</strong></td>';
+            html+='<td>'+getNamaKelas(r.kelas_id)+'</td>';
+            html+='<td>'+fmtDate(r.tanggal)+'</td>';
+            html+='<td><span class="badge badge-'+r.status+'">'+r.status.charAt(0).toUpperCase()+r.status.slice(1)+'</span></td>';
+            html+='<td>';
+            if(r.status==='hadir') html+='<span class="badge badge-approved">Tercatat</span>';
+            else if(r.status==='alpha') html+='<span class="badge badge-alpha">Alpha</span>';
+            else html+='<span class="badge badge-'+r.approval+'">'+r.approval.charAt(0).toUpperCase()+r.approval.slice(1)+'</span>';
+            html+='</td><td>'+(r.keterangan||'-')+'</td></tr>';
+        });
+        html+='</tbody></table>';
+    } else {
+        html+='<div class="empty-state"><div class="empty-icon">📭</div><p>Belum ada data.</p></div>';
+    }
+    html+='</div></div></div>';
+    el.innerHTML=html;
+};
+
+var selectedAbsen='';
+function selectAbsen(s){
+    selectedAbsen=s;
+    ['hadir','izin','sakit'].forEach(function(x){var el=document.getElementById('opt-'+x);if(el)el.classList.toggle('selected',x===s);});
+    var det=document.getElementById('detailIzinSakit');
+    if(det) det.style.display=(s==='izin'||s==='sakit')?'block':'none';
+    var btn=document.getElementById('submitAbsen');
+    if(btn) btn.style.display='block';
+}
+function submitSelfAbsen(){
+    if(!selectedAbsen){alert('Pilih status!');return;}
+    if(selectedAbsen==='izin'||selectedAbsen==='sakit'){
+        var ket=document.getElementById('selfKet');
+        if(!ket||!ket.value.trim()){alert('Alasan wajib diisi!');return;}
+    }
+    var t=today();
+    var u=currentUser;
+    DB.absensi.push({
+        id:DB.nextAbsenId++,
+        user_id:u.id,
+        kelas_id:u.kelas_id,
+        tanggal:t,
+        status:selectedAbsen,
+        keterangan:(document.getElementById('selfKet')?document.getElementById('selfKet').value:''),
+        bukti_file:'',
+        approval:selectedAbsen==='hadir'?'approved':'pending',
+        approved_by:null,
+        approved_at:null,
+        recorded_by:u.id,
+        is_self_report:1,
+        created_at:t+' '+new Date().toTimeString().slice(0,8)
+    });
+    selectedAbsen='';
+    buildSidebar();
+    goPage('dashboard');
+}
+
+// ---- INPUT ABSENSI ----
+pageRenderers.absensi = function(){
+    var el=document.getElementById('page-absensi');
+    var selKelas=window._absenKelas||0;
+    var selTgl=window._absenTgl||today();
+    var msgHtml=window._absenMsg||'';
+    window._absenMsg='';
+
+    var html='<div id="absenAlert">'+msgHtml+'</div>';
+    html+='<div class="card mb-3"><div class="card-header"><h3>🔍 Pilih Kelas & Tanggal</h3></div><div class="card-body">';
+    html+='<div class="filter-bar">';
+    html+='<select id="absenKelasSelect" class="form-control"><option value="">-- Pilih Kelas --</option>';
+    DB.kelas.forEach(function(k){html+='<option value="'+k.id+'"'+(selKelas==k.id?' selected':'')+'>'+k.nama_kelas+'</option>';});
+    html+='</select>';
+    html+='<input type="date" id="absenTglInput" class="form-control" value="'+selTgl+'">';
+    html+='<button class="btn btn-primary" onclick="loadAbsensiInput()">Tampilkan</button>';
+    html+='</div></div></div>';
+
+    if(selKelas>0){
+        var siswaList=DB.users.filter(function(u){return u.role==='siswa'&&u.kelas_id==selKelas&&u.is_active;}).sort(function(a,b){return a.nama_lengkap.localeCompare(b.nama_lengkap);});
+        html+='<div class="card"><div class="card-header"><h3>📋 Input Absensi &mdash; '+fmtDate(selTgl)+'</h3></div><div class="card-body">';
+        if(siswaList.length>0){
+            html+='<div class="table-wrapper"><table><thead><tr><th>No</th><th>Nama Siswa</th><th>Status</th><th>Keterangan</th></tr></thead><tbody>';
+            siswaList.forEach(function(s,i){
+                var ex=DB.absensi.find(function(a){return a.user_id===s.id&&a.tanggal===selTgl;});
+                html+='<tr><td>'+(i+1)+'</td><td><strong>'+s.nama_lengkap+'</strong><br><small class="text-muted">'+s.username+'</small></td><td>';
+                html+='<select id="st_'+s.id+'" class="form-control" style="min-width:120px;">';
+                [{v:'hadir',l:'✅ Hadir'},{v:'izin',l:'📝 Izin'},{v:'sakit',l:'🤒 Sakit'},{v:'alpha',l:'❌ Alpha'}].forEach(function(opt){
+                    html+='<option value="'+opt.v+'"'+(ex&&ex.status===opt.v?' selected':'')+'>'+opt.l+'</option>';
+                });
+                html+='</select></td><td><input type="text" id="ket_'+s.id+'" class="form-control" placeholder="Opsional" value="'+(ex?ex.keterangan||'':'')+'"></td></tr>';
+            });
+            html+='</tbody></table></div>';
+            html+='<div style="margin-top:20px;text-align:right;">';
+            html+='<button class="btn btn-primary" onclick="saveAbsensiInput()">💾 Simpan Absensi</button>';
+            html+='</div>';
+        } else {
+            html+='<div class="empty-state"><div class="empty-icon">🔍</div><p>Tidak ada siswa di kelas ini.</p></div>';
+        }
+        html+='</div></div>';
+    } else {
+        html+='<div class="card"><div class="card-body"><div class="empty-state"><div class="empty-icon">👆</div><p>Pilih kelas dan tanggal untuk mulai input absensi.</p></div></div></div>';
+    }
+    el.innerHTML=html;
+};
+function loadAbsensiInput(){
+    window._absenKelas=parseInt(document.getElementById('absenKelasSelect').value)||0;
+    window._absenTgl=document.getElementById('absenTglInput').value||today();
+    goPage('absensi');
+}
+function saveAbsensiInput(){
+    var kelas=window._absenKelas||0;
+    var tgl=window._absenTgl||today();
+    var siswaList=DB.users.filter(function(u){return u.role==='siswa'&&u.kelas_id==kelas&&u.is_active;});
+    var nBaru=0,nUpdate=0;
+    siswaList.forEach(function(s){
+        var st=document.getElementById('st_'+s.id);
+        var ket=document.getElementById('ket_'+s.id);
+        if(!st)return;
+        var status=st.value;
+        var keterangan=ket?ket.value:'';
+        var existing=DB.absensi.find(function(a){return a.user_id===s.id&&a.tanggal===tgl;});
+        if(existing){
+            existing.status=status;existing.keterangan=keterangan;existing.approval='approved';
+            nUpdate++;
+        } else {
+            DB.absensi.push({id:DB.nextAbsenId++,user_id:s.id,kelas_id:kelas,tanggal:tgl,status:status,keterangan:keterangan,bukti_file:'',approval:'approved',approved_by:currentUser.id,approved_at:tgl+' '+new Date().toTimeString().slice(0,8),recorded_by:currentUser.id,is_self_report:0,created_at:tgl+' '+new Date().toTimeString().slice(0,8)});
+            nBaru++;
+        }
+    });
+    window._absenMsg='<div class="alert alert-success">Absensi berhasil disimpan! ('+nBaru+' baru, '+nUpdate+' diperbarui)</div>';
+    buildSidebar();
+    goPage('absensi');
+}
+
+// ---- RIWAYAT ----
+pageRenderers.riwayat = function(){
+    var el=document.getElementById('page-riwayat');
+    var u=currentUser;
+    var fKelas=window._riwKelas||0;
+    var fTgl=window._riwTgl||'';
+    var fStatus=window._riwStatus||'';
+
+    var html='<div class="card mb-3"><div class="card-header"><h3>🔍 Filter Riwayat</h3></div><div class="card-body"><div class="filter-bar">';
+    if(u.role!=='siswa'){
+        html+='<select id="riwKelas" class="form-control"><option value="">Semua Kelas</option>';
+        DB.kelas.forEach(function(k){html+='<option value="'+k.id+'"'+(fKelas==k.id?' selected':'')+'>'+k.nama_kelas+'</option>';});
+        html+='</select>';
+    }
+    html+='<input type="date" id="riwTgl" class="form-control" value="'+fTgl+'">';
+    html+='<select id="riwStatus" class="form-control"><option value="">Semua Status</option>';
+    ['hadir','izin','sakit','alpha'].forEach(function(s){html+='<option value="'+s+'"'+(fStatus===s?' selected':'')+'>'+s.charAt(0).toUpperCase()+s.slice(1)+'</option>';});
+    html+='</select>';
+    html+='<button class="btn btn-primary" onclick="filterRiwayat()">Filter</button>';
+    html+='<button class="btn btn-secondary" onclick="resetRiwayat()">Reset</button>';
+    html+='</div></div></div>';
+
+    var rows=DB.absensi;
+    if(u.role==='siswa') rows=rows.filter(function(a){return a.user_id===u.id;});
+    if(fKelas>0) rows=rows.filter(function(a){return a.kelas_id==fKelas;});
+    if(fTgl) rows=rows.filter(function(a){return a.tanggal===fTgl;});
+    if(fStatus) rows=rows.filter(function(a){return a.status===fStatus;});
+    rows=rows.slice().sort(function(a,b){return b.tanggal.localeCompare(a.tanggal)||((getUser(a.user_id)||{nama_lengkap:''}).nama_lengkap.localeCompare((getUser(b.user_id)||{nama_lengkap:''}).nama_lengkap));}).slice(0,200);
+
+    html+='<div class="card"><div class="card-header"><h3>📜 Data Riwayat Absensi</h3><span class="text-muted" style="font-size:13px;">'+rows.length+' data</span></div><div class="card-body"><div class="table-wrapper">';
+    if(rows.length>0){
+        html+='<table><thead><tr><th>No</th>';
+        if(u.role!=='siswa') html+='<th>Nama Siswa</th>';
+        html+='<th>Kelas</th><th>Tanggal</th><th>Status</th><th>Approval</th><th>Keterangan</th></tr></thead><tbody>';
+        rows.forEach(function(r,i){
+            var ru=getUser(r.user_id);
+            html+='<tr><td>'+(i+1)+'</td>';
+            if(u.role!=='siswa') html+='<td><strong>'+(ru?ru.nama_lengkap:'-')+'</strong><br><small class="text-muted">'+(ru?ru.username:'-')+'</small></td>';
+            html+='<td>'+getNamaKelas(r.kelas_id)+'</td><td>'+fmtDate(r.tanggal)+'</td>';
+            html+='<td><span class="badge badge-'+r.status+'">'+r.status.charAt(0).toUpperCase()+r.status.slice(1)+'</span></td>';
+            html+='<td><span class="badge badge-'+r.approval+'">'+r.approval.charAt(0).toUpperCase()+r.approval.slice(1)+'</span></td>';
+            html+='<td>'+(r.keterangan||'-')+'</td></tr>';
+        });
+        html+='</tbody></table>';
+    } else {
+        html+='<div class="empty-state"><div class="empty-icon">📭</div><p>Tidak ada data ditemukan.</p></div>';
+    }
+    html+='</div></div></div>';
+    el.innerHTML=html;
+};
+function filterRiwayat(){
+    window._riwKelas=parseInt(document.getElementById('riwKelas')?document.getElementById('riwKelas').value:0)||0;
+    window._riwTgl=document.getElementById('riwTgl')?document.getElementById('riwTgl').value:'';
+    window._riwStatus=document.getElementById('riwStatus')?document.getElementById('riwStatus').value:'';
+    goPage('riwayat');
+}
+function resetRiwayat(){
+    window._riwKelas=0;window._riwTgl='';window._riwStatus='';
+    goPage('riwayat');
+}
+
+// ---- KELOLA IZIN ----
+pageRenderers.kelola_izin = function(){
+    var el=document.getElementById('page-kelola_izin');
+    var tab=window._izinTab||'pending';
+    var pc=getPendingCount();
+    var msgHtml=window._izinMsg||'';
+    window._izinMsg='';
+
+    var html='<div id="izinAlert">'+msgHtml+'</div>';
+    html+='<div class="tab-btns">';
+    html+='<button class="btn '+(tab==='pending'?'btn-primary':'btn-secondary')+'" onclick="setIzinTab(\'pending\')">Pending '+(pc>0?'('+pc+')':'')+'</button>';
+    html+='<button class="btn '+(tab==='history'?'btn-primary':'btn-secondary')+'" onclick="setIzinTab(\'history\')">Riwayat</button>';
+    html+='</div>';
+    html+='<div class="card"><div class="card-header"><h3>'+(tab==='pending'?'Pengajuan Menunggu Persetujuan':'Riwayat Persetujuan')+'</h3></div><div class="card-body"><div class="table-wrapper">';
+
+    var rows;
+    if(tab==='pending'){
+        rows=DB.absensi.filter(function(a){return a.approval==='pending'&&(a.status==='izin'||a.status==='sakit');}).sort(function(a,b){return a.created_at.localeCompare(b.created_at);});
+    } else {
+        rows=DB.absensi.filter(function(a){return (a.approval==='approved'||a.approval==='rejected')&&a.is_self_report===1&&(a.status==='izin'||a.status==='sakit');}).sort(function(a,b){return b.created_at.localeCompare(a.created_at);}).slice(0,50);
+    }
+    if(rows.length>0){
+        html+='<table><thead><tr><th>No</th><th>Siswa</th><th>Kelas</th><th>Tanggal</th><th>Status</th><th>Alasan</th><th>Waktu</th>';
+        if(tab==='pending') html+='<th>Aksi</th>';
+        else html+='<th>Keputusan</th><th>Oleh</th>';
+        html+='</tr></thead><tbody>';
+        rows.forEach(function(r,i){
+            var ru=getUser(r.user_id);
+            html+='<tr><td>'+(i+1)+'</td>';
+            html+='<td><strong>'+(ru?ru.nama_lengkap:'-')+'</strong><br><small class="text-muted">'+(ru?ru.username:'-')+'</small></td>';
+            html+='<td>'+getNamaKelas(r.kelas_id)+'</td>';
+            html+='<td>'+fmtDate(r.tanggal)+'</td>';
+            html+='<td><span class="badge badge-'+r.status+'">'+r.status.charAt(0).toUpperCase()+r.status.slice(1)+'</span></td>';
+            html+='<td style="max-width:180px;">'+(r.keterangan||'-')+'</td>';
+            html+='<td><small>'+r.created_at.slice(5,10)+' '+r.created_at.slice(11,16)+'</small></td>';
+            if(tab==='pending'){
+                html+='<td><div class="action-btns">';
+                html+='<button class="btn btn-sm btn-success" onclick="approveIzin('+r.id+',\'approved\')">Setujui</button>';
+                html+='<button class="btn btn-sm btn-danger" onclick="approveIzin('+r.id+',\'rejected\')">Tolak</button>';
+                html+='</div></td>';
+            } else {
+                html+='<td><span class="badge badge-'+r.approval+'">'+r.approval.charAt(0).toUpperCase()+r.approval.slice(1)+'</span></td>';
+                var ab=getUser(r.approved_by);
+                html+='<td>'+(ab?ab.nama_lengkap:'-')+'</td>';
+            }
+            html+='</tr>';
+        });
+        html+='</tbody></table>';
+    } else {
+        html+='<div class="empty-state"><div class="empty-icon">'+(tab==='pending'?'🎉':'📭')+'</div><p>'+(tab==='pending'?'Tidak ada pengajuan pending.':'Belum ada riwayat.')+'</p></div>';
+    }
+    html+='</div></div></div>';
+    el.innerHTML=html;
+};
+function setIzinTab(t){window._izinTab=t;goPage('kelola_izin');}
+function approveIzin(id,action){
+    var msg=action==='approved'?'Setujui?':'Tolak?';
+    if(!confirm(msg))return;
+    var a=DB.absensi.find(function(x){return x.id===id;});
+    if(a){a.approval=action;a.approved_by=currentUser.id;a.approved_at=new Date().toISOString().replace('T',' ').slice(0,19);}
+    window._izinMsg='<div class="alert alert-success">Pengajuan berhasil '+(action==='approved'?'disetujui':'ditolak')+'!</div>';
+    buildSidebar();
+    goPage('kelola_izin');
+}
+
+// ---- KELOLA KELAS ----
+pageRenderers.kelola_kelas = function(){
+    var el=document.getElementById('page-kelola_kelas');
+    var msgHtml=window._kelasMsg||'';
+    window._kelasMsg='';
+
+    var html='<div id="kelasAlert">'+msgHtml+'</div>';
+    html+='<div style="margin-bottom:20px;"><button class="btn btn-primary" onclick="openModal(\'addKelasModal\')">➕ Tambah Kelas Baru</button></div>';
+    html+='<div class="card"><div class="card-header"><h3>🏫 Daftar Kelas</h3></div><div class="card-body"><div class="table-wrapper">';
+    html+='<table><thead><tr><th>No</th><th>Nama Kelas</th><th>Jumlah Siswa</th><th>Dibuat</th><th>Aksi</th></tr></thead><tbody>';
+    DB.kelas.forEach(function(k,i){
+        var jml=DB.users.filter(function(u){return u.role==='siswa'&&u.kelas_id===k.id&&u.is_active;}).length;
+        html+='<tr><td>'+(i+1)+'</td><td><strong>'+k.nama_kelas+'</strong></td><td>'+jml+' siswa</td><td>'+fmtDate(k.created_at)+'</td>';
+        html+='<td><div class="action-btns">';
+        html+='<button class="btn btn-sm btn-warning" onclick="editKelasModal('+k.id+',\''+k.nama_kelas+'\')">✏️ Edit</button>';
+        html+='<button class="btn btn-sm btn-danger" onclick="deleteKelasAct('+k.id+',\''+k.nama_kelas+'\','+jml+')">🗑️ Hapus</button>';
+        html+='</div></td></tr>';
+    });
+    html+='</tbody></table></div></div></div>';
+
+    // Modals
+    html+='<div class="modal-overlay" id="addKelasModal"><div class="modal"><div class="modal-header"><h3>➕ Tambah Kelas</h3><button class="modal-close" onclick="closeModal(\'addKelasModal\')">✕</button></div><div class="modal-body"><div class="form-group"><label>Nama Kelas</label><input type="text" id="addKelasNama" class="form-control" placeholder="Contoh: XII-TJKT"></div></div><div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal(\'addKelasModal\')">Batal</button><button class="btn btn-primary" onclick="addKelasAct()">💾 Simpan</button></div></div></div>';
+    html+='<div class="modal-overlay" id="editKelasModal"><div class="modal"><div class="modal-header"><h3>✏️ Edit Kelas</h3><button class="modal-close" onclick="closeModal(\'editKelasModal\')">✕</button></div><div class="modal-body"><div class="form-group"><label>Nama Kelas</label><input type="text" id="editKelasNamaInput" class="form-control"></div></div><div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal(\'editKelasModal\')">Batal</button><button class="btn btn-primary" onclick="saveEditKelas()">💾 Simpan</button></div></div></div>';
+    el.innerHTML=html;
+};
+var _editKelasId=0;
+function editKelasModal(id,nama){
+    _editKelasId=id;
+    document.getElementById('editKelasNamaInput').value=nama;
+    openModal('editKelasModal');
+}
+function addKelasAct(){
+    var nama=document.getElementById('addKelasNama').value.trim();
+    if(!nama){alert('Nama kelas wajib diisi.');return;}
+    if(DB.kelas.find(function(k){return k.nama_kelas===nama;})){window._kelasMsg='<div class="alert alert-error">Nama kelas sudah ada.</div>';}
+    else{DB.kelas.push({id:DB.nextKelasId++,nama_kelas:nama,created_at:today()});window._kelasMsg='<div class="alert alert-success">Kelas \''+nama+'\' berhasil ditambahkan!</div>';}
+    closeModal('addKelasModal');
+    goPage('kelola_kelas');
+}
+function saveEditKelas(){
+    var nama=document.getElementById('editKelasNamaInput').value.trim();
+    if(!nama){alert('Nama kelas wajib diisi.');return;}
+    var k=DB.kelas.find(function(x){return x.id===_editKelasId;});
+    if(k){k.nama_kelas=nama;window._kelasMsg='<div class="alert alert-success">Kelas berhasil diperbarui!</div>';}
+    closeModal('editKelasModal');
+    goPage('kelola_kelas');
+}
+function deleteKelasAct(id,nama,jml){
+    if(jml>0){alert('Tidak bisa menghapus kelas "'+nama+'" karena masih ada '+jml+' siswa.');return;}
+    if(!confirm('Hapus kelas "'+nama+'"?'))return;
+    DB.kelas=DB.kelas.filter(function(k){return k.id!==id;});
+    window._kelasMsg='<div class="alert alert-success">Kelas berhasil dihapus.</div>';
+    goPage('kelola_kelas');
+}
+
+// ---- KELOLA USER ----
+pageRenderers.kelola_user = function(){
+    var el=document.getElementById('page-kelola_user');
+    var msgHtml=window._userMsg||'';
+    window._userMsg='';
+
+    var html='<div id="userAlert">'+msgHtml+'</div>';
+    html+='<div style="margin-bottom:20px;"><button class="btn btn-primary" onclick="openModal(\'addUserModal\')">➕ Tambah User Baru</button></div>';
+    html+='<div class="card"><div class="card-header"><h3>👥 Daftar Semua User</h3><span class="text-muted" style="font-size:13px;">'+DB.users.length+' user</span></div><div class="card-body"><div class="table-wrapper">';
+    html+='<table><thead><tr><th>No</th><th>Username</th><th>Nama Lengkap</th><th>Role</th><th>Kelas</th><th>Status</th><th>Aksi</th></tr></thead><tbody>';
+    var sorted=DB.users.slice().sort(function(a,b){
+        var ro={kepala_sekolah:0,admin:1,siswa:2};
+        return (ro[a.role]-ro[b.role])||a.nama_lengkap.localeCompare(b.nama_lengkap);
+    });
+    sorted.forEach(function(u,i){
+        html+='<tr><td>'+(i+1)+'</td><td><strong>'+u.username+'</strong></td><td>'+u.nama_lengkap+'</td>';
+        html+='<td>'+roleBadge(u.role)+'</td>';
+        html+='<td>'+getNamaKelas(u.kelas_id)+'</td>';
+        html+='<td>'+(u.is_active?'<span class="badge badge-aktif">Aktif</span>':'<span class="badge badge-nonaktif">Nonaktif</span>')+'</td>';
+        html+='<td><div class="action-btns">';
+        html+='<button class="btn btn-sm btn-warning" onclick="editUserModal('+u.id+')">✏️ Edit</button>';
+        html+='<button class="btn btn-sm btn-info" onclick="resetPW('+u.id+',\''+u.username+'\',\''+u.role+'\')">🔑 Reset PW</button>';
+        if(u.id!==currentUser.id) html+='<button class="btn btn-sm btn-danger" onclick="deleteUserAct('+u.id+',\''+u.username+'\')">🗑️ Hapus</button>';
+        html+='</div></td></tr>';
+    });
+    html+='</tbody></table></div></div></div>';
+
+    // Add User Modal
+    html+='<div class="modal-overlay" id="addUserModal"><div class="modal"><div class="modal-header"><h3>➕ Tambah User Baru</h3><button class="modal-close" onclick="closeModal(\'addUserModal\')">✕</button></div><div class="modal-body">';
+    html+='<div class="form-group"><label>Username</label><input type="text" id="auUsername" class="form-control" placeholder="Contoh: siswa_tjkt_04"></div>';
+    html+='<div class="form-group"><label>Nama Lengkap</label><input type="text" id="auNama" class="form-control" placeholder="Contoh: Budi Santoso"></div>';
+    html+='<div class="form-group"><label>Role</label><select id="auRole" class="form-control" onchange="toggleKelasAdd()"><option value="siswa">Siswa</option><option value="admin">Admin</option><option value="kepala_sekolah">Kepala Sekolah</option></select></div>';
+    html+='<div class="form-group" id="addKelasGroup"><label>Kelas</label><select id="auKelas" class="form-control"><option value="">-- Pilih Kelas --</option>';
+    DB.kelas.forEach(function(k){html+='<option value="'+k.id+'">'+k.nama_kelas+'</option>';});
+    html+='</select></div>';
+    html+='<p class="text-muted" style="font-size:13px;">Password default: Admin=admin123 | Siswa=siswa123 | Kepsek=kepsek123</p>';
+    html+='</div><div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal(\'addUserModal\')">Batal</button><button class="btn btn-primary" onclick="addUserAct()">💾 Simpan</button></div></div></div>';
+
+    // Edit User Modal
+    html+='<div class="modal-overlay" id="editUserModal"><div class="modal"><div class="modal-header"><h3>✏️ Edit User</h3><button class="modal-close" onclick="closeModal(\'editUserModal\')">✕</button></div><div class="modal-body">';
+    html+='<div class="form-group"><label>Username</label><input type="text" id="euUsername" class="form-control"></div>';
+    html+='<div class="form-group"><label>Nama Lengkap</label><input type="text" id="euNama" class="form-control"></div>';
+    html+='<div class="form-group"><label>Role</label><select id="euRole" class="form-control" onchange="toggleKelasEdit()"><option value="siswa">Siswa</option><option value="admin">Admin</option><option value="kepala_sekolah">Kepala Sekolah</option></select></div>';
+    html+='<div class="form-group" id="editKelasGroup"><label>Kelas</label><select id="euKelas" class="form-control"><option value="">-- Tidak Ada --</option>';
+    DB.kelas.forEach(function(k){html+='<option value="'+k.id+'">'+k.nama_kelas+'</option>';});
+    html+='</select></div>';
+    html+='<div class="form-group"><label>Status</label><select id="euActive" class="form-control"><option value="1">Aktif</option><option value="0">Nonaktif</option></select></div>';
+    html+='<p class="text-muted" style="font-size:13px;">Gunakan "Reset PW" untuk mereset password ke default.</p>';
+    html+='</div><div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal(\'editUserModal\')">Batal</button><button class="btn btn-primary" onclick="saveEditUser()">💾 Simpan Perubahan</button></div></div></div>';
+
+    el.innerHTML=html;
+    toggleKelasAdd();
+};
+function toggleKelasAdd(){
+    var r=document.getElementById('auRole');
+    var g=document.getElementById('addKelasGroup');
+    if(r&&g) g.style.display=r.value==='siswa'?'block':'none';
+}
+function toggleKelasEdit(){
+    var r=document.getElementById('euRole');
+    var g=document.getElementById('editKelasGroup');
+    if(r&&g) g.style.display=r.value==='siswa'?'block':'none';
+}
+function addUserAct(){
+    var un=(document.getElementById('auUsername').value||'').trim();
+    var nama=(document.getElementById('auNama').value||'').trim();
+    var role=document.getElementById('auRole').value;
+    var kelasId=parseInt(document.getElementById('auKelas')?document.getElementById('auKelas').value:0)||null;
+    if(!un||!nama){alert('Username dan nama wajib diisi.');return;}
+    if(DB.users.find(function(u){return u.username===un;})){window._userMsg='<div class="alert alert-error">Username sudah digunakan.</div>';closeModal('addUserModal');goPage('kelola_user');return;}
+    var pw={admin:'admin123',kepala_sekolah:'kepsek123',siswa:'siswa123'}[role];
+    DB.users.push({id:DB.nextUserId++,username:un,password:pw,nama_lengkap:nama,role:role,kelas_id:role==='siswa'?kelasId:null,is_active:1,foto_profil:'',created_at:new Date().toISOString().replace('T',' ').slice(0,19)});
+    window._userMsg='<div class="alert alert-success">User \''+un+'\' berhasil ditambahkan! (Password: '+pw+')</div>';
+    closeModal('addUserModal');goPage('kelola_user');
+}
+var _editUserId=0;
+function editUserModal(id){
+    _editUserId=id;
+    var u=getUser(id);if(!u)return;
+    document.getElementById('euUsername').value=u.username;
+    document.getElementById('euNama').value=u.nama_lengkap;
+    document.getElementById('euRole').value=u.role;
+    document.getElementById('euKelas').value=u.kelas_id||'';
+    document.getElementById('euActive').value=u.is_active;
+    toggleKelasEdit();
+    openModal('editUserModal');
+}
+function saveEditUser(){
+    var u=getUser(_editUserId);if(!u)return;
+    var un=(document.getElementById('euUsername').value||'').trim();
+    var nama=(document.getElementById('euNama').value||'').trim();
+    var role=document.getElementById('euRole').value;
+    var kelasId=parseInt(document.getElementById('euKelas').value)||null;
+    var active=parseInt(document.getElementById('euActive').value);
+    if(!un||!nama){alert('Username dan nama wajib diisi.');return;}
+    if(DB.users.find(function(x){return x.username===un&&x.id!==_editUserId;})){window._userMsg='<div class="alert alert-error">Username sudah digunakan user lain.</div>';closeModal('editUserModal');goPage('kelola_user');return;}
+    u.username=un;u.nama_lengkap=nama;u.role=role;u.kelas_id=role==='siswa'?kelasId:null;u.is_active=active;
+    window._userMsg='<div class="alert alert-success">User \''+un+'\' berhasil diperbarui!</div>';
+    closeModal('editUserModal');goPage('kelola_user');
+}
+function resetPW(id,username,role){
+    if(!confirm('Reset password user "'+username+'" ke default?'))return;
+    var pw={admin:'admin123',kepala_sekolah:'kepsek123',siswa:'siswa123'}[role];
+    var u=getUser(id);if(u)u.password=pw;
+    window._userMsg='<div class="alert alert-success">Password berhasil direset ke default ('+pw+').</div>';
+    goPage('kelola_user');
+}
+function deleteUserAct(id,username){
+    if(!confirm('HAPUS user "'+username+'"? Data absensi terkait juga akan terhapus!'))return;
+    DB.users=DB.users.filter(function(u){return u.id!==id;});
+    DB.absensi=DB.absensi.filter(function(a){return a.user_id!==id;});
+    window._userMsg='<div class="alert alert-success">User berhasil dihapus.</div>';
+    goPage('kelola_user');
+}
+
+// ---- PROFIL ----
+pageRenderers.profil = function(){
+    var el=document.getElementById('page-profil');
+    var u=currentUser;
+    var msgHtml=window._profilMsg||'';
+    window._profilMsg='';
+    var ini=getInitials(u.nama_lengkap);
+
+    var html='<div id="profilAlert">'+msgHtml+'</div>';
+    html+='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:24px;">';
+
+    // Info card
+    html+='<div class="card"><div class="card-header"><h3>👤 Informasi Profil</h3></div><div class="card-body">';
+    html+='<div style="text-align:center;margin-bottom:24px;">';
+    html+='<div class="profile-photo-wrapper"><div class="profile-initials">'+ini+'</div><label class="profile-photo-edit" title="Ubah Foto">📷<input type="file" accept="image/*" onchange="alert(\'Upload foto tidak tersedia di versi HTML demo ini.\')"></label></div>';
+    html+='<h3 style="font-size:20px;">'+u.nama_lengkap+'</h3>';
+    html+='<div style="margin-top:8px;">'+roleBadge(u.role)+'</div>';
+    html+='</div>';
+    html+='<table style="width:100%;">';
+    var rows2=[['Username',u.username],['Role',u.role.replace(/_/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();})],u.kelas_id?['Kelas',getNamaKelas(u.kelas_id)]:null,['Status',u.is_active?'<span class="badge badge-aktif">Aktif</span>':'<span class="badge badge-nonaktif">Nonaktif</span>'],['Terdaftar',u.created_at.slice(0,10)]];
+    rows2.forEach(function(r,i){
+        if(!r)return;
+        html+='<tr><td style="padding:10px 0;color:var(--text-muted);font-size:13px;width:40%;'+(i>0?'border-top:1px solid var(--border)':'')+'">' + r[0] +'</td>';
+        html+='<td style="padding:10px 0;font-weight:600;'+(i>0?'border-top:1px solid var(--border)':'')+'">'+r[1]+'</td></tr>';
+    });
+    html+='</table></div></div>';
+
+    // Password card
+    html+='<div class="card"><div class="card-header"><h3>🔑 Ubah Password</h3></div><div class="card-body">';
+    html+='<div class="form-group"><label>Password Lama</label><input type="password" id="oldPw" class="form-control" placeholder="Masukkan password lama"></div>';
+    html+='<div class="form-group"><label>Password Baru</label><input type="password" id="newPw" class="form-control" placeholder="Minimal 6 karakter"></div>';
+    html+='<div class="form-group"><label>Ulangi Password Baru</label><input type="password" id="repPw" class="form-control" placeholder="Ketik ulang password baru"></div>';
+    html+='<button class="btn btn-primary btn-block" onclick="changePW()">🔐 Ubah Password</button>';
+    html+='</div></div>';
+    html+='</div>';
+    el.innerHTML=html;
+};
+function changePW(){
+    var old=document.getElementById('oldPw').value;
+    var nw=document.getElementById('newPw').value;
+    var rep=document.getElementById('repPw').value;
+    if(!old||!nw||!rep){window._profilMsg='<div class="alert alert-error">Semua field harus diisi.</div>';goPage('profil');return;}
+    if(nw!==rep){window._profilMsg='<div class="alert alert-error">Password baru dan konfirmasi tidak cocok.</div>';goPage('profil');return;}
+    if(nw.length<6){window._profilMsg='<div class="alert alert-error">Password baru minimal 6 karakter.</div>';goPage('profil');return;}
+    if(currentUser.password!==old){window._profilMsg='<div class="alert alert-error">Password lama salah.</div>';goPage('profil');return;}
+    currentUser.password=nw;
+    var u=getUser(currentUser.id);if(u)u.password=nw;
+    window._profilMsg='<div class="alert alert-success">Password berhasil diubah!</div>';
+    goPage('profil');
+}
+
+// ---- KELOLA LOGO ----
+pageRenderers.kelola_logo = function(){
+    var el=document.getElementById('page-kelola_logo');
+    var msgHtml=window._logoMsg||'';
+    window._logoMsg='';
+    var html='<div id="logoAlert">'+msgHtml+'</div>';
+    html+='<div class="card" style="max-width:500px;"><div class="card-header"><h3>Logo Sekolah</h3></div><div class="card-body" style="text-align:center;">';
+    html+='<div style="margin-bottom:20px;"><div style="width:120px;height:120px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:48px;margin:0 auto;">📚</div>';
+    html+='<p style="margin-top:10px;color:var(--text-muted);font-size:13px;">Menggunakan emoji default (upload tidak tersedia di versi HTML)</p></div>';
+    html+='<div class="form-group"><label>Pilih File Logo</label><input type="file" accept="image/*" class="form-control" onchange="alert(\'Upload logo tidak tersedia di versi HTML demo ini.\')"></div>';
+    html+='<p style="color:var(--text-muted);font-size:12px;margin-bottom:16px;">Format: JPG, PNG, GIF, WEBP. Maks 5MB.</p>';
+    html+='<button class="btn btn-primary btn-block" onclick="alert(\'Upload tidak tersedia di versi HTML demo ini.\')">Upload Logo</button>';
+    html+='</div></div>';
+    el.innerHTML=html;
+};
+
+// ---- EKSPOR ----
+pageRenderers.ekspor = function(){
+    var el=document.getElementById('page-ekspor');
+    var html='<div class="card"><div class="card-header"><h3>📦 Ekspor Absensi</h3></div><div class="card-body">';
+    html+='<p style="color:var(--text-secondary);margin-bottom:20px;">Pilih rentang tanggal dan kelas untuk mengekspor data absensi.</p>';
+    html+='<div class="filter-bar" style="margin-bottom:16px;">';
+    html+='<div class="form-group" style="flex:1;min-width:180px;margin-bottom:0;"><label>Dari Tanggal</label><input type="date" id="ekspFrom" class="form-control" value="'+new Date(new Date().setDate(1)).toISOString().split('T')[0]+'"></div>';
+    html+='<div class="form-group" style="flex:1;min-width:180px;margin-bottom:0;"><label>Sampai Tanggal</label><input type="date" id="ekspTo" class="form-control" value="'+today()+'"></div>';
+    html+='<div class="form-group" style="flex:1;min-width:180px;margin-bottom:0;"><label>Kelas</label><select id="ekspKelas" class="form-control"><option value="">Semua Kelas</option>';
+    DB.kelas.forEach(function(k){html+='<option value="'+k.id+'">'+k.nama_kelas+'</option>';});
+    html+='</select></div></div>';
+    html+='<button class="btn btn-primary" onclick="doEkspor()">📥 Ekspor ke CSV</button>';
+    html+='</div></div>';
+    el.innerHTML=html;
+};
+function doEkspor(){
+    var from=document.getElementById('ekspFrom').value;
+    var to=document.getElementById('ekspTo').value;
+    var kelas=parseInt(document.getElementById('ekspKelas').value)||0;
+    var rows=DB.absensi.filter(function(a){
+        return a.tanggal>=from && a.tanggal<=to && (kelas===0||a.kelas_id===kelas);
+    });
+    var csv='No,Nama,Username,Kelas,Tanggal,Status,Approval,Keterangan\n';
+    rows.sort(function(a,b){return a.tanggal.localeCompare(b.tanggal)||(getUser(a.user_id)||{nama_lengkap:''}).nama_lengkap.localeCompare((getUser(b.user_id)||{nama_lengkap:''}).nama_lengkap);});
+    rows.forEach(function(r,i){
+        var u=getUser(r.user_id)||{nama_lengkap:'-',username:'-'};
+        csv+=(i+1)+',"'+u.nama_lengkap+'","'+u.username+'","'+getNamaKelas(r.kelas_id)+'","'+r.tanggal+'","'+r.status+'","'+r.approval+'","'+(r.keterangan||'')+'"\n';
+    });
+    var blob=new Blob([csv],{type:'text/csv'});
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='absensi_ekspor_'+from+'_'+to+'.csv';
+    a.click();
+}
+
+// ============ THEME ============
+function cycleTheme(){
+    var c=localStorage.getItem('theme')||'system';
+    var n=c==='system'?'dark':c==='dark'?'light':'system';
+    localStorage.setItem('theme',n);
+    applyTheme(n);
+    updateThemeBtn(n,'themeToggle');
+}
+function cycleThemeLogin(){
+    var c=localStorage.getItem('theme')||'system';
+    var n=c==='system'?'dark':c==='dark'?'light':'system';
+    localStorage.setItem('theme',n);
+    applyTheme(n);
+    updateThemeBtn(n,'loginThemeBtn');
+    document.getElementById('themeLabel').textContent='Tema: '+(n==='system'?'Ikuti Sistem':n==='dark'?'Dark':'Light');
+}
+function applyTheme(s){
+    if(s==='system'){var d=window.matchMedia('(prefers-color-scheme:dark)').matches;document.documentElement.setAttribute('data-theme',d?'dark':'light');}
+    else document.documentElement.setAttribute('data-theme',s);
+}
+function updateThemeBtn(m,id){
+    var b=document.getElementById(id);if(!b)return;
+    b.textContent=m==='system'?'💻':m==='dark'?'🌙':'☀️';
+}
+
+// ============ MODAL UTILS ============
+function openModal(id){document.getElementById(id).classList.add('show');}
+function closeModal(id){document.getElementById(id).classList.remove('show');}
+document.addEventListener('click',function(e){if(e.target.classList.contains('modal-overlay'))e.target.classList.remove('show');});
+
+// ============ SIDEBAR TOGGLE ============
+function toggleSidebar(){
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('show');
+}
+
+// Enter key on login
+document.addEventListener('keydown',function(e){
+    if(e.key==='Enter'&&document.getElementById('loginPage').style.display!=='none') doLogin();
+});
+
+// Init theme buttons
+document.addEventListener('DOMContentLoaded',function(){
+    var s=localStorage.getItem('theme')||'system';
+    updateThemeBtn(s,'loginThemeBtn');
+    updateThemeBtn(s,'themeToggle');
+    document.getElementById('themeLabel').textContent='Tema: '+(s==='system'?'Ikuti Sistem':s==='dark'?'Dark':'Light');
+    window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change',function(){
+        if((localStorage.getItem('theme')||'system')==='system') applyTheme('system');
+    });
+});
+</script>
+</body>
+</html>
